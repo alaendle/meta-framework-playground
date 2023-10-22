@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { DOCUMENT, isPlatformServer } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, Optional, PLATFORM_ID } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +12,39 @@ import { Component } from '@angular/core';
 export class AppComponent {
   public counter: number = 0;
 
-  constructor() { }
+  data!: string;
+  baseURL!: string;
+  isServer: Boolean;
+
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+    @Optional() @Inject(REQUEST) private request: any,
+    @Inject(DOCUMENT) private document: Document,
+    private http: HttpClient
+  ) {
+    this.isServer = isPlatformServer(platformId);
+
+    // get base url
+    if (this.isServer) {
+      this.baseURL = 'http://[::1]:4200/'; //this.request.headers.referer;
+    } else {
+      this.baseURL = this.document.location.origin + '/';
+    }
+
+    // grab data
+    this.getData().then((data) => this.data = data.r);
+  }
+
+  async getData(): Promise<any> {
+    return await firstValueFrom(
+      this.http.get(this.baseURL + 'api/me', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json'
+      })
+    );
+  };
 
   public increment() {
     this.counter++;

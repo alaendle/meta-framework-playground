@@ -46,6 +46,12 @@ export class AppComponent {
     );
   };
 
+  // https://github.com/angular/angular/issues/51626
+  // still a problem for caching!
+  public reload() {
+    this.getData().then((data) => this.data = data.r);
+  }
+
   public increment() {
     this.counter++;
     return this.counter;

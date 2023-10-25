@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@analogjs/astro-angular": "^0.2.14",
+    "@analogjs/astro-angular": "^0.2.15",
     "@angular-devkit/build-angular": "^16.2.7",
     "@angular/animations": "^16.2.10",
     "@angular/common": "^16.2.10",
@@ -21,7 +21,7 @@
     "@angular/platform-browser": "^16.2.10",
     "@angular/platform-browser-dynamic": "^16.2.10",
     "@angular/platform-server": "^16.2.10",
-    "astro": "^3.3.3",
+    "astro": "^3.3.4",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "^0.13.3"

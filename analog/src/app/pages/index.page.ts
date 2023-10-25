@@ -1,10 +1,14 @@
+import { NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { injectTrpcClient } from '../../trpc-client';
+import { Note } from '../../note';
 
 @Component({
   selector: 'app-home',
   standalone: true,
+  imports: [NgFor],
   template: `
     <div>
       <a href="https://analogjs.org/" target="_blank">
@@ -20,6 +24,10 @@ import { firstValueFrom } from 'rxjs';
       <button type="button" (click)="increment()">Count {{ count }}</button>
     </div>
     <h3>{{ data }}</h3>
+
+    <div *ngFor="let note of notes">
+      <p class="mb-4">{{ note.note }}</p>
+    </div>
 
     <p class="read-the-docs">
       For guides on how to customize this project, visit the
@@ -46,6 +54,9 @@ import { firstValueFrom } from 'rxjs';
 export default class HomeComponent {
   count = 0;
   data: string;
+  notes: Note[];
+
+  private _trpc = injectTrpcClient();
 
   increment() {
     this.count++;
@@ -56,7 +67,9 @@ export default class HomeComponent {
     private http: HttpClient
   ) {
     this.data = "";
+    this.notes = [];
     this.getData().then((data) => this.data = data.title);
+    this.getNotes().then((notes) => this.notes = notes);
   }
 
   async getData(): Promise<any> {
@@ -70,4 +83,8 @@ export default class HomeComponent {
       })
     );
   };
+
+  async getNotes() {
+    return await firstValueFrom(this._trpc.note.list.query());
+  }
 }

@@ -16,23 +16,16 @@ import { firstValueFrom } from 'rxjs';
     data: string;
 
   constructor() {
-    this.data = "Hallo?";
-    this.getData().then((data) => this.data = data.title);  // both calls seem to be needed!?
+    this.getData().subscribe((data) => this.data = data.title);
   }
 
-  ngOnInit() {
-    this.getData().then((data) => this.data = data.title);  // both calls seem to be needed!?
-  }
-
-  async getData(): Promise<any> {
-    return await firstValueFrom(
+  getData() {
       //this.http.get('/api/me', {  // relative URLS should be supported with angular 17
-      this.http.get('https://jsonplaceholder.typicode.com/todos/1', {
+      return this.http.get<{ title:string }>('https://jsonplaceholder.typicode.com/todos/1', {
         headers: {
           'Content-Type': 'application/json',
         },
         responseType: 'json'
       })
-    );
   };
   }

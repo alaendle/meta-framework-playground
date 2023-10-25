@@ -1,8 +1,6 @@
-import { DOCUMENT, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, Optional, PLATFORM_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 @Component({
   selector: 'app-root',
@@ -11,33 +9,19 @@ import { REQUEST } from '@nguniversal/express-engine/tokens';
 })
 export class AppComponent {
   public counter: number = 0;
-
-  data!: string;
-  baseURL!: string;
-  isServer: Boolean;
+  data: string;
 
   constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    @Optional() @Inject(REQUEST) private request: any,
-    @Inject(DOCUMENT) private document: Document,
     private http: HttpClient
   ) {
-    this.isServer = isPlatformServer(platformId);
-
-    // get base url
-    if (this.isServer) {
-      this.baseURL = 'http://[::1]:4200/'; //this.request.headers.referer;
-    } else {
-      this.baseURL = this.document.location.origin + '/';
-    }
-
-    // grab data
-    this.getData().then((data) => this.data = data.r);
+    this.data = "";
+    this.getData().then((data) => this.data = data.title);
   }
 
   async getData(): Promise<any> {
     return await firstValueFrom(
-      this.http.get(this.baseURL + 'api/me', {
+      //this.http.get('/api/me', {  // relative URLS should be supported with angular 17
+      this.http.get('https://jsonplaceholder.typicode.com/todos/1', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,7 +33,7 @@ export class AppComponent {
   // https://github.com/angular/angular/issues/51626
   // still a problem for caching!
   public reload() {
-    this.getData().then((data) => this.data = data.r);
+    this.getData().then((data) => this.data = data.title);
   }
 
   public increment() {

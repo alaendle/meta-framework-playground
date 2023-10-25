@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +19,7 @@ import { Component } from '@angular/core';
     <div class="card">
       <button type="button" (click)="increment()">Count {{ count }}</button>
     </div>
+    <h3>{{ data }}</h3>
 
     <p class="read-the-docs">
       For guides on how to customize this project, visit the
@@ -42,8 +45,29 @@ import { Component } from '@angular/core';
 })
 export default class HomeComponent {
   count = 0;
+  data: string;
 
   increment() {
     this.count++;
+    this.getData().then((data) => this.data = data.title);
   }
+
+  constructor(
+    private http: HttpClient
+  ) {
+    this.data = "";
+    this.getData().then((data) => this.data = data.title);
+  }
+
+  async getData(): Promise<any> {
+    return await firstValueFrom(
+      //this.http.get('/api/v1/hello', {  // relative URLS should be supported with angular 17
+      this.http.get('https://jsonplaceholder.typicode.com/todos/1', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        responseType: 'json'
+      })
+    );
+  };
 }

@@ -60,7 +60,7 @@ export default class HomeComponent {
 
   increment() {
     this.count++;
-    this.getData().then((data) => this.data = data.title);
+    this.getData().subscribe((data) => this.data = data.title);
   }
 
   constructor(
@@ -68,14 +68,14 @@ export default class HomeComponent {
   ) {
     this.data = "";
     this.notes = [];
-    this.getData().then((data) => this.data = data.title);
-    this.getNotes().then((notes) => this.notes = notes);
+    this.getData().subscribe((data) => this.data = data.title);
+    this.getNotes().subscribe((notes) => this.notes = notes);
   }
 
-  async getData(): Promise<any> {
-    return await firstValueFrom(
+  getData() {
+    return (
       //this.http.get('/api/v1/hello', {  // relative URLS should be supported with angular 17
-      this.http.get('https://jsonplaceholder.typicode.com/todos/1', {
+      this.http.get<{ title:string }>('https://jsonplaceholder.typicode.com/todos/1', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -84,7 +84,7 @@ export default class HomeComponent {
     );
   };
 
-  async getNotes() {
-    return await firstValueFrom(this._trpc.note.list.query());
+  getNotes() {
+    return this._trpc.note.list.query();
   }
 }

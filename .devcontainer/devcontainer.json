@@ -9,9 +9,11 @@
 		"ghcr.io/devcontainers-contrib/features/angular-cli:2": {
 			"version": "latest"
 		},
-		"ghcr.io/devcontainers-contrib/features/npm-package:1": {
-			"package": "npm-check-updates",
-			"version": "latest"
+		"ghcr.io/devcontainers-contrib/features/apt-packages:1": {
+			"packages": "chromium"
+		},
+		"ghcr.io/devcontainers-contrib/features/bash-command:1": {
+			"command": "npm -g install npm-check-updates lighthouse"
 		}
 	},
 

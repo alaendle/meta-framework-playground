@@ -77,7 +77,7 @@ export default component$(() => {
 
       <div class="container container-center">
         <Form action={action} spaReset>
-          <input type="text" name="text" required class={styles.input} />{" "}
+          <input type="text" name="text" required class={styles.input} /><whitespace />
           <button type="submit" class="button-dark">
             Add item
           </button>

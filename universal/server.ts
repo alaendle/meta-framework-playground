@@ -7,6 +7,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { AppServerModule } from './src/main.server';
 import { handler } from 'handler';
+import { startWsServer } from 'src/server/wsServer'
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -40,6 +41,9 @@ export function app(): express.Express {
 
 function run(): void {
   const port = process.env['PORT'] || 4000;
+
+  // Startup websocket server
+  startWsServer();
 
   // Start up the Node server
   const server = app();

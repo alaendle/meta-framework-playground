@@ -1,6 +1,8 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { client } from 'src/client';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +14,23 @@ export class AppComponent {
   data: string;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId : Object
   ) {
     this.data = "";
-    this.getData().then((data) => this.data = data.title);
+
+    if (isPlatformServer(this.platformId)) {
+      // only on server
+    }
+    else {
+      // only on client
+      const globalAny = global as any;
+      globalAny.WebSocket = WebSocket;
+      
+      client().onAdd.subscribe(undefined, { onData(d) { console.log(d); }});
+    }
+    
+    //this.getData().then((data) => this.data = data.title);
   }
 
   async getData(): Promise<any> {

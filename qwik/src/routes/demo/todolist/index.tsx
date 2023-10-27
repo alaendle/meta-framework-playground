@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import {
   type DocumentHead,
   routeLoader$,
@@ -6,14 +6,24 @@ import {
   zod$,
   z,
   Form,
+  server$,
 } from "@builder.io/qwik-city";
 import styles from "./todolist.module.css";
+import { from } from "rxjs";
 
 interface ListItem {
   text: string;
 }
 
 export const list: ListItem[] = [];
+
+const dateStream = server$(async function* () {
+  while (true) {
+    console.log("new date from server!")
+    yield new Date();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+});
 
 export const useListLoader = routeLoader$(() => {
   return list;
@@ -34,6 +44,12 @@ export const useAddToListAction = routeAction$(
 export default component$(() => {
   const list = useListLoader();
   const action = useAddToListAction();
+  const currentDate = useSignal<Date>();
+
+  useVisibleTask$(async () => {
+      const x = await dateStream.call(this);
+      from(x).subscribe(date => currentDate.value = date)
+  });
 
   return (
     <>
@@ -56,6 +72,8 @@ export default component$(() => {
           </ul>
         )}
       </div>
+
+      <div><p>{ currentDate.value?.toISOString() }</p></div>
 
       <div class="container container-center">
         <Form action={action} spaReset>

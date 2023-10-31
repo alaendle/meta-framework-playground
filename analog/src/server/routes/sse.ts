@@ -1,5 +1,9 @@
 import { defineEventHandler } from 'h3'
 
+interface Clock {
+  readonly time: string;
+}
+
 export default defineEventHandler((event) => {
     const { req, res } = event.node
 
@@ -11,8 +15,9 @@ export default defineEventHandler((event) => {
     res.writeHead(200, headers);
 
     let intervalID = setInterval(() => {
-        res.write(`data: { time: "${new Date().toISOString()}" }\n\n`);
-        console.log(`Date send!`);
+        let data : Clock = { time: new Date().toISOString() }
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        console.log(`Data send: ${JSON.stringify(data)}`);
       }, 1000);
     
     req.on('close', () => {

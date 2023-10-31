@@ -1,6 +1,6 @@
-import { NgFor } from '@angular/common';
+import { NgFor, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { injectTrpcClient } from '../../trpc-client';
 import { Note } from '../../note';
@@ -64,8 +64,20 @@ export default class HomeComponent {
   }
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId : Object
   ) {
+    if (isPlatformServer(this.platformId)) {
+      // only on server
+    }
+    else {
+      // only on client
+      const source = new EventSource(`/api/sse`);
+      source.addEventListener('message', (e) => {
+        console.log(e.data);
+      });
+    }
+
     this.data = "";
     this.notes = [];
     this.getData().subscribe((data) => this.data = data.title);

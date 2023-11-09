@@ -1,5 +1,9 @@
 import { Server } from 'socket.io';
 
+interface Clock {
+  readonly time: string;
+}
+  
 const defineNitroPlugin = ((_nitroApp: any) => {
     console.log("SOCKET.IO PLUGIN")
     //console.log(_nitroApp);
@@ -16,16 +20,14 @@ const defineNitroPlugin = ((_nitroApp: any) => {
     })
 
     io.on('connect', (socket) => {
-        socket.on('error', (msg) => {
-            console.log('socket error', msg)
-        })
-
-        socket.on('disconnecting', () => {
-            // put code here..
-        })
-
-        socket.on('messageFromClient', () => {
-           // put code here etc.
+        let intervalID = setInterval(() => {
+            let data : Clock = { time: new Date().toISOString() }
+            socket.emit(`data`, data, (res: any) => console.log(`Data send: ${JSON.stringify(data)} with result: ${res}`));
+          }, 1000);
+        
+        socket.on('disconnect', (reason) => {
+            console.log(`Disconnect socket: ${reason}`);
+            clearInterval(intervalID);
         })
     })
 })

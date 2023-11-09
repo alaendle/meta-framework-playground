@@ -4,6 +4,7 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { injectTrpcClient } from '../../trpc-client';
 import { Note } from '../../note';
+import { io } from "socket.io-client";
 
 @Component({
   selector: 'app-home',
@@ -75,6 +76,18 @@ export default class HomeComponent {
       const source = new EventSource(`/api/sse`);
       source.addEventListener('message', (e) => {
         console.log(e.data);
+      });
+
+      // socket.io
+      const socket = io('ws://localhost:3010');
+
+      // receive a "foo" event from the server
+      socket.on("connect", () => {
+        console.log("connected via socket.io!")
+      });
+
+      socket.on("data", (data) => {
+        console.log(`Socket data: ${JSON.stringify(data)}`);
       });
     }
 

@@ -11,7 +11,8 @@
     "start": "npm run dev",
     "build": "ng build",
     "watch": "ng build --watch",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "dependencies": {
     "@analogjs/content": "^0.2.19",
@@ -54,10 +55,18 @@
   "devDependencies": {
     "@analogjs/platform": "^0.2.19",
     "@angular-devkit/build-angular": "^16.2.10",
+    "@angular-eslint/builder": "16.3.1",
+    "@angular-eslint/eslint-plugin": "16.3.1",
+    "@angular-eslint/eslint-plugin-template": "16.3.1",
+    "@angular-eslint/schematics": "16.3.1",
+    "@angular-eslint/template-parser": "16.3.1",
     "@angular/cli": "^16.2.8",
     "@angular/compiler-cli": "^16.2.12",
     "@nx/vite": "~16.8.1",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
     "autoprefixer": "^10.4.16",
+    "eslint": "^8.51.0",
     "jsdom": "^22.1.0",
     "nx": "~16.8.1",
     "postcss": "^8.4.31",

@@ -56,7 +56,7 @@ export default class HomeComponent {
   data: string;
   notes: Note[];
 
-  private _trpc = injectTrpcClient();
+  private readonly _trpc = injectTrpcClient();
 
   increment() {
     this.count++;
@@ -64,8 +64,8 @@ export default class HomeComponent {
   }
 
   constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId : object
+    private readonly http: HttpClient,
+    @Inject(PLATFORM_ID) private readonly platformId : object
   ) {
     if (isPlatformServer(this.platformId)) {
       // only on server

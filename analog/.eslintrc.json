@@ -8,11 +8,19 @@
       "files": [
         "*.ts"
       ],
+      // We set parserOptions.project for the project to allow TypeScript to create the type-checker behind the scenes when we run linting
+      "parserOptions": {
+        "project": ["tsconfig.(app|spec).json"]
+      },
+      "plugins": ["functional"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:functional/external-typescript-recommended",
+        "plugin:functional/recommended",
+        "plugin:functional/stylistic"
       ],
       "rules": {
         "@angular-eslint/directive-selector": [
@@ -34,7 +42,16 @@
         "@typescript-eslint/no-unused-vars": [
           "error",
           { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_.*" }
-        ]
+        ],
+        "functional/functional-parameters": "warn",
+        "functional/no-throw-statements": "warn",
+        "functional/immutable-data": "warn",
+        "functional/no-let": "warn",
+        "functional/no-return-void": "warn",
+        "functional/no-expression-statements": "warn",
+        "functional/no-conditional-statements": "warn",
+        "functional/prefer-immutable-types": "warn",
+        "functional/no-classes": "warn"
       }
     },
     {

@@ -14,8 +14,8 @@ export default defineEventHandler((event) => {
       };
     res.writeHead(200, headers);
 
-    let intervalID = setInterval(() => {
-        let data : Clock = { time: new Date().toISOString() }
+    const intervalID = setInterval(() => {
+        const data : Clock = { time: new Date().toISOString() }
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         console.log(`Data send: ${JSON.stringify(data)}`);
       }, 1000);

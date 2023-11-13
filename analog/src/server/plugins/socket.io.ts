@@ -4,7 +4,7 @@ interface Clock {
   readonly time: string;
 }
   
-const defineNitroPlugin = ((_nitroApp: any) => {
+const defineNitroPlugin = ((_nitroApp: unknown) => {
     console.log("SOCKET.IO PLUGIN")
     //console.log(_nitroApp);
     const port = process.env.SOCKET_IO_PORT || 3010
@@ -20,9 +20,9 @@ const defineNitroPlugin = ((_nitroApp: any) => {
     })
 
     io.on('connect', (socket) => {
-        let intervalID = setInterval(() => {
-            let data : Clock = { time: new Date().toISOString() }
-            socket.emit(`data`, data, (res: any) => console.log(`Data send: ${JSON.stringify(data)} with result: ${res}`));
+        const intervalID = setInterval(() => {
+            const data : Clock = { time: new Date().toISOString() }
+            socket.emit(`data`, data, (res: unknown) => console.log(`Data send: ${JSON.stringify(data)} with result: ${res}`));
           }, 1000);
         
         socket.on('disconnect', (reason) => {

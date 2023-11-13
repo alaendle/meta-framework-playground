@@ -1,7 +1,6 @@
 import { NgFor, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { injectTrpcClient } from '../../trpc-client';
 import { Note } from '../../note';
 import { io } from "socket.io-client";
@@ -66,7 +65,7 @@ export default class HomeComponent {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId : Object
+    @Inject(PLATFORM_ID) private platformId : object
   ) {
     if (isPlatformServer(this.platformId)) {
       // only on server
@@ -107,7 +106,7 @@ export default class HomeComponent {
         responseType: 'json'
       })
     );
-  };
+  }
 
   getNotes() {
     return this._trpc.note.list.query();
